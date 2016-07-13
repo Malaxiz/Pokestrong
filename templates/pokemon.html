@@ -1,0 +1,74 @@
+<div class="tabs tabs-icon-top tabs-striped">
+  <a class="tab-item" ng-class="{'active': !isStrengths}" ng-click="isStrengths = false;">
+    <i class="icon ion-thumbsdown"></i>
+    Defense weaknesses
+  </a>
+  <a class="tab-item" ng-class="{'active': isStrengths}" ng-click="isStrengths = true;">
+    <i class="icon ion-thumbsup"></i>
+    Attack strengths
+  </a>
+  <a class="tab-item" ng-click="go('/');">
+    <i class="icon ion-arrow-return-left"></i>
+    Go Back
+  </a>
+</div>
+
+<div class="card">
+  <div class="list">
+    <div class="row item">
+      
+    </div>
+  </div>
+</div>
+
+<ion-header-bar class="bar-stable">
+  <h1 class="title with-subtitle">{{title}} <span style="opacity: 0.5;" ng-class="{'old-version': isOldVersion}">{{version.number}}</span><span class="is-subtitle">Skapad av Didrik Munther</span></h1>
+  <button class="button icon ion-navicon" ng-click="infoPopup();"></button>
+</ion-header-bar>
+<ion-content>
+
+  <!-- ACTIVE POKEMON -->
+
+  <div
+  class="card"
+  ng-repeat="pokemon in pokemons"
+  ng-init="url = 'https://img.pokemondb.net/artwork/' + pokemon.$id.toLowerCase() + '.jpg'; height = 70;"
+  ng-if="pokemonName == pokemon.$id"
+  >
+    <ion-list class="nolink">
+        <div
+        class="row item item-divider"
+        style="height:{{height}}px;line-height: {{height / 2 + 13}}px;"
+        >
+            <div class="col col-50 col-demo">{{pokemon.$id}}</div>
+            <div class="col col-25 col-demo" style="background-color:#{{colors[pokemon.type1]}}">{{pokemon.type1}}</div>
+            <div class="col col-25 col-demo" style="background-color:#{{colors[pokemon.type2]}}">{{pokemon.type2}}</div>
+
+        </div>
+
+        <img class="full-image" ng-src="{{url}}" style="display:block;" ng-if="showImage" ng-click="toggleImage();">
+        <div class="row item" ng-if="!showImage" ng-click="toggleImage();">
+          <div class="col col-100 col-demo button-demo">Show Image ...</div>
+        </div>
+    </ion-list>
+  </div>
+
+  <!-- POKEMON LIST -->
+
+  <div class="card" style="margin-bottom:100px;">
+    <ion-list class="nolink">
+        <div
+        class="row item"
+        ng-repeat="pokemon in pokemons | filterCounters:pokemonObj:this:ready:isStrengths | orderBy:'-strength':isStrengths"
+        ng-init="url = 'https://img.pokemondb.net/artwork/' + pokemon.$id.toLowerCase() + '.jpg'; height = 70;"
+        ng-click="go('/pokemon/{{pokemon.$id}}');"
+        style="height:{{height}}px;line-height: {{height / 2 + 13}}px; background-color:{{color(pokemon.strength, 3, -5)}}">
+          <div class="col col-25 col-demo">{{pokemon.$id}}</div>
+          <div class="col col-25 col-demo" style="background-color:#{{colors[pokemon.type1]}}" ng-class="{'col-strong': pokemon.type1Strong, 'col-weak': pokemon.type1Weak}">{{pokemon.type1}}</div>
+          <div class="col col-25 col-demo" style="background-color:#{{colors[pokemon.type2]}}" ng-class="{'col-strong': pokemon.type2Strong, 'col-weak': pokemon.type2Weak}">{{pokemon.type2}}</div>
+          <div class="col col-25 col-demo">{{pokemon.strength}}</div>
+        </div>
+    </ion-list>
+  </div>
+
+</ion-content>

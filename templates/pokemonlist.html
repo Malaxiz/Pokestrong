@@ -1,0 +1,24 @@
+<!-- style="background: -webkit-linear-gradient(left, #{{colors[pokemon.type1color]}}, #{{colors[pokemon.type1color]}} 50%, #{{colors[pokemon.type2color]}} 50%, #{{colors[pokemon.type2color]}})" -->
+
+<ion-header-bar class="bar-stable">
+  <h1 class="title with-subtitle">{{title}} <span style="opacity: 0.5;" ng-class="{'old-version': isOldVersion}">{{version.number}}</span><span class="is-subtitle">Skapad av Didrik Munther</span></h1>
+  <button class="button icon ion-navicon" ng-click="infoPopup();"></button>
+</ion-header-bar>
+<ion-content>
+
+  <div class="card">
+    <ion-list class="nolink">
+        <div
+        class="row item"
+        ng-repeat="pokemon in pokemons"
+        ng-init="url = 'https://img.pokemondb.net/artwork/' + pokemon.$id.toLowerCase() + '.jpg'; height = 70;"
+        ng-click="hideImage(); go('/pokemon/{{pokemon.$id}}');"
+        style="height:{{height}}px;line-height: {{height / 2 + 13}}px;">
+          <div class="col col-50 col-demo">{{pokemon.$id}}</div>
+          <div class="col col-25 col-demo" style="background-color:#{{colors[pokemon.type1]}}">{{pokemon.type1}}</div>
+          <div class="col col-25 col-demo" style="background-color:#{{colors[pokemon.type2]}}">{{pokemon.type2}}</div>
+        </div>
+    </ion-list>
+  </div>
+
+</ion-content>
