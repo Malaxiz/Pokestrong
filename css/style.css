@@ -1,3 +1,30 @@
+@font-face {
+	font-family: Pokemon-hollow;
+	src: url('Pokemon Hollow.ttf');
+}
+
+@font-face {
+	font-family: Pokemon-solid;
+	src: url('Pokemon Solid.ttf');
+}
+
+.list-entry {
+	height: 70px;
+	line-height: 48px;
+}
+
+.card-margin {
+	margin-bottom: 80px;
+}
+
+.white-text {
+	color: white;
+}
+
+.pokefont {
+	font-family: 'Pokemon-solid';
+}
+
 .col-demo {
 	padding: 5px;
     width: 100%;

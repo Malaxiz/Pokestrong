@@ -1,12 +1,12 @@
 angular.module('pokestrong')
 .controller('MainCtrl',
-	function($scope, $rootScope, $firebaseArray, $firebaseObject, $ionicPopup, $location) {
+	function($scope, $rootScope, $firebaseArray, $firebaseObject, $ionicPopup, $location, $window) {
 
 		$scope.typeDebug = false;
 
 		$scope.title = 'Pokéstrong';
 		$scope.version = {};
-		$scope.version.number = '0.2';
+		$scope.version.number = '0.5';
 		$scope.isOldVersion = false;
 		$scope.realVersion = '';
 		$scope.ready = false;
@@ -17,6 +17,7 @@ angular.module('pokestrong')
 
 		var colorRef = new Firebase('https://pokestrong.firebaseio.com/typecolors');
 		$scope.colors = $firebaseObject(colorRef);
+		$scope.colorsList = $firebaseArray(colorRef);
 
 		var counterRef = new Firebase('https://pokestrong.firebaseio.com/counters');
 		$scope.counters = $firebaseObject(counterRef);
@@ -40,6 +41,10 @@ angular.module('pokestrong')
 		$scope.go = function(location) {
 			$location.path(location);
 		};
+
+		$scope.goBack = function() {
+			$window.history.back();
+		}
 
 		$scope.showImage = false;
 		$scope.toggleImage = function() {
@@ -81,23 +86,21 @@ angular.module('pokestrong')
 			$ionicPopup.alert({
 				templateUrl: 'templates/info.html',
 				title: 'App Info',
-				scope: $scope,
+				scope: $scope
 			});
 		};
 
 		$scope.openLink = function(link) {
+			console.log('here');
 			window.open(encodeURI(link), '_system', 'location=yes');
+			console.log('here2');
 			return false;
 		};
 
-	}
-)
-.controller('PokemonCtrl',
-	function($scope, $rootScope, $routeParams, $firebaseObject) {
-		$scope.pokemonName = $routeParams.pokemon;
-		$scope.isStrengths = false;
-		
-		$scope.pokemonObj = $rootScope.pokemonsObj[$scope.pokemonName];
+		$scope.textWhite = function(color) {
+			color = String(color)
+			return !(parseInt(color.replace('#', ''), 16) > 0xffffff / 2);
+		};
 
 		$scope.color = function(score, max, min) {
 			// max score is green, half is yellow, and min is red
@@ -111,6 +114,28 @@ angular.module('pokestrong')
 			toReturn = '#' + red.toString(16) + green.toString(16) + '00';
 			return toReturn;
 		};
+	}
+)
+.controller('ListCtrl', 
+	function($scope, $rootScope) {
+		$scope.pokemonListActive = true;
+
+
+	}
+)
+.controller('TypeCtrl',
+	function($scope, $rootScope, $routeParams) {
+		$scope.typeName = $routeParams.type;
+		$scope.isStrengths = false;
+
+	}
+)
+.controller('PokemonCtrl',
+	function($scope, $rootScope, $routeParams, $firebaseObject) {
+		$scope.pokemonName = $routeParams.pokemon;
+		$scope.isStrengths = false;
+		
+		$scope.pokemonObj = $rootScope.pokemonsObj[$scope.pokemonName];
 	}
 )
 .filter('handleEmptyType', function() {
@@ -155,6 +180,10 @@ angular.module('pokestrong')
 			}
 			if(!targetType2) {
 				targetSecond = false;
+			}
+
+			if(inputType1 == 'Empty' || targetType1 == 'Empty') {
+				continue;
 			}
 
 			score1 = 0;
@@ -211,11 +240,13 @@ angular.module('pokestrong')
 		return input;
 	}
 })
-.filter('filterStrengths', function() {
-	return function(input, attributes) {
-		if (!angular.isObject(input)) return input;
+.filter('typesToPokemon', function() {
+	return function(input) {
+		for(var i = 0; i < input.length; i++) {
+			input[i]['type1'] = input[i]['$id']
+		}
 
-
+		return input;
 	}
 })
 

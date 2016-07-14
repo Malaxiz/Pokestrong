@@ -3,15 +3,20 @@ angular.module('pokestrong')
 	function($routeProvider) {
 		$routeProvider
 		.when('/', {
-			templateUrl: 'templates/pokemonlist.html'
+			templateUrl: 'templates/pokemonlist.html',
+			controller: 'ListCtrl'
 		})
 		.when('/pokemon/:pokemon', {
 			templateUrl: 'templates/pokemon.html',
 			controller: 'PokemonCtrl'
 		})
+		.when('/type/:type', {
+			templateUrl: 'templates/type.html',
+			controller: 'TypeCtrl'
+		})
 
 		.otherwise({
-			redirectTo: '/404'
+			redirectTo: '/'
 		});
 	}
 );

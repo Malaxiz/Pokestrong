@@ -23,54 +23,38 @@
 </ion-header-bar>
 <ion-content>
 
-  <!-- ACTIVE POKEMON -->
-
   <div
   class="card"
-  ng-repeat="pokemon in pokemons"
-  ng-init="url = 'https://img.pokemondb.net/artwork/' + pokemon.$id.toLowerCase() + '.jpg'; height = 70;"
-  ng-if="pokemonName == pokemon.$id"
+  ng-repeat="(type, color) in colors"
+  ng-if="typeName == type"
   >
     <ion-list class="nolink">
         <div class="item item-divider" style="text-align: center;">{{isStrengths ? 'Attacker' : 'Defender'}}</div>
-        <div
-        class="row item item-divider list-entry"
-        style=""
-        >
-            <div class="col col-50 col-demo">{{pokemon.$id}}</div>
-            <div class="col col-25 col-demo" style="background-color:#{{colors[pokemon.type1]}}">{{pokemon.type1}}</div>
-            <div class="col col-25 col-demo" style="background-color:#{{colors[pokemon.type2]}}">{{pokemon.type2}}</div>
-
-        </div>
-
-        <img class="full-image" ng-src="{{url}}" style="display:block;" ng-if="showImage" ng-click="toggleImage();">
-        <div class="row item" ng-if="!showImage" ng-click="toggleImage();">
-          <div class="col col-100 col-demo button-demo">Show Image ...</div>
+        <div class="row item item-divider list-entry">
+          <div class="col col-100 col-demo" style="background-color:#{{color}};" ng-class="{'white-text': textWhite(color)}">{{type}}</div>
         </div>
     </ion-list>
   </div>
-
-  <!-- POKEMON LIST -->
 
   <div class="card" style="margin-bottom:100px;">
     <ion-list class="nolink">
         <div class="item item-divider" style="text-align: center;">{{!isStrengths ? 'Attackers' : 'Defenders'}}</div>
         <div class="row item item-divider" style="text-align: center; margin-bottom:3px;">
-          <div class="col col-25 col-demo">Name</div>
-          <div class="col col-25 col-demo">Type 1</div>
-          <div class="col col-25 col-demo">Type 2</div>
+          <div class="col col-75 col-demo">Type</div>
           <div class="col col-25 col-demo">Score</div>
         </div>
         <div
         class="row item list-entry"
-        ng-repeat="pokemon in pokemons | filterCounters:pokemonObj:this:ready:isStrengths | orderBy:'-strength':isStrengths"
-        ng-init="url = 'https://img.pokemondb.net/artwork/' + pokemon.$id.toLowerCase() + '.jpg'; height = 70;"
-        ng-click="go('/pokemon/{{pokemon.$id}}');"
-        style="background-color:{{color(pokemon.strength, 4, -5)}}; margin-bottom:-10px;">
-          <div class="col col-25 col-demo">{{pokemon.$id}}</div>
+        ng-repeat="type in colorsList | typesToPokemon | filterCounters:{'type1': typeName}:this:ready:isStrengths | orderBy:'-strength':isStrengths"
+        ng-if="type.$id != 'Empty'"
+        ng-click="go('/type/{{type.$id}}');"
+        style="background-color:{{color(type.strength, 4, -5)}}; margin-bottom:-10px;">
+          <div class="col col-75 col-demo" style="background-color: #{{type.$value}}" ng-class="{'white-text': textWhite(type.$value)}">{{type.$id}}</div>
+          <div class="col col-25 col-demo">{{type.strength}}</div>
+<!--           <div class="col col-25 col-demo">{{pokemon.$id}}</div>
           <div class="col col-25 col-demo" style="background-color:#{{colors[pokemon.type1]}}" ng-class="{'col-strong': pokemon.type1Strong, 'col-weak': pokemon.type1Weak}">{{pokemon.type1}}</div>
           <div class="col col-25 col-demo" style="background-color:#{{colors[pokemon.type2]}}" ng-class="{'col-strong': pokemon.type2Strong, 'col-weak': pokemon.type2Weak}">{{pokemon.type2}}</div>
-          <div class="col col-25 col-demo">{{pokemon.strength}}</div>
+          <div class="col col-25 col-demo">{{pokemon.strength}}</div> -->
         </div>
     </ion-list>
   </div>
